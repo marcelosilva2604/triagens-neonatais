@@ -8,11 +8,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const usgResults = document.getElementById('usgResults');
     const usgResultsSection = document.getElementById('usgResultsSection');
     const errorDiv = document.getElementById('error');
+    const printButton = document.getElementById('printButton');
+    const printDateSpan = document.getElementById('printDate');
     
     // Verificar elementos principais para evitar erros null
     if (!resultsDiv || !usgCranioCard || !errorDiv) {
         console.error('Elementos principais da página não encontrados');
         return;
+    }
+    
+    // Configurar data de impressão
+    if (printDateSpan) {
+        const today = new Date();
+        printDateSpan.textContent = today.toLocaleDateString('pt-BR');
     }
     
     // Botões
@@ -70,6 +78,36 @@ document.addEventListener('DOMContentLoaded', function() {
         voltarBtn.addEventListener('click', function() {
             // Recarregar a página completamente
             window.location.reload();
+        });
+    }
+    
+    // Botão de impressão
+    if (printButton) {
+        printButton.addEventListener('click', function() {
+            // Preparar para impressão - compactar layout
+            optimizeForPrinting();
+            window.print();
+        });
+    }
+    
+    // Função para otimizar layout antes da impressão
+    function optimizeForPrinting() {
+        // Remover espaços desnecessários para economia de espaço
+        const cardBody = document.querySelector('#results .card-body');
+        if (cardBody) {
+            cardBody.classList.add('compact-print');
+        }
+        
+        // Ajustar tamanho das fontes para caber mais conteúdo
+        const headings = document.querySelectorAll('#results h3, #results h4, #results h5');
+        headings.forEach(heading => {
+            heading.classList.add('print-compact-heading');
+        });
+        
+        // Compactar checkboxes para economizar espaço
+        const checkContainers = document.querySelectorAll('.check-container');
+        checkContainers.forEach(container => {
+            container.classList.add('print-compact-checks');
         });
     }
     
@@ -185,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Esconder erros anteriores
             errorDiv.classList.add('d-none');
             
-            // Obter dados do formulário
+            // Obter data do USG
             const usgDateInput = document.getElementById('usgDate');
             if (!usgDateInput) {
                 showError("Campo de data do USG não encontrado");
@@ -193,18 +231,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             const usgDate = usgDateInput.value;
             
-            const usgResultInput = document.querySelector('input[name="usgResult"]:checked');
-            if (!usgResultInput) {
-                showError("Selecione um resultado para o USG");
-                return;
-            }
-            const usgResult = usgResultInput.value;
+            // Obter resultado do USG
+            const usgResult = document.querySelector('input[name="usgResult"]:checked')?.value || 'normal';
             
-            if (!usgDate) {
-                showError("Por favor, selecione a data do USG.");
-                return;
-            }
-            
+            // Enviar para o backend
             try {
                 const response = await fetch('/calculate_usg_followup', {
                     method: 'POST',
@@ -213,19 +243,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: JSON.stringify({
                         usg_date: usgDate,
-                        usg_result: usgResult,
-                        gestational_age: directUsgMode ? 0 : patientData.gestational_age
+                        usg_result: usgResult
                     })
                 });
                 
                 const data = await response.json();
                 
                 if (data.success) {
-                    // Esconder o card de USG
-                    usgCranioCard.classList.add('d-none');
-                    
+                    // Se estamos em modo direto, exibir apenas os resultados do USG
                     if (directUsgMode) {
-                        // Em modo direto, precisamos criar um resultado específico para USG
+                        // Esconder o card de cálculo
+                        usgCranioCard.classList.add('d-none');
+                        
+                        // Criar conteúdo de resultados para modo direto
                         const directResultsContent = `
                             <div class="card shadow mb-4">
                                 <div class="card-header bg-info text-white">
@@ -235,12 +265,32 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <ul class='list-group mb-2'>
                                         ${data.dates.map(([desc, date]) => 
                                             `<li class='list-group-item d-flex justify-content-between align-items-center'>
-                                                <span>${desc}</span>
+                                                <div class="d-flex align-items-center">
+                                                    <span>${desc}</span>
+                                                    <div class="check-container">
+                                                        <input type="checkbox" id="req_${desc.replace(/\s+/g, '_')}" class="form-check-input">
+                                                        <label for="req_${desc.replace(/\s+/g, '_')}">Solicitado</label>
+                                                        <input type="checkbox" id="check_${desc.replace(/\s+/g, '_')}" class="form-check-input">
+                                                        <label for="check_${desc.replace(/\s+/g, '_')}">Checado</label>
+                                                    </div>
+                                                </div>
                                                 <span class='badge bg-info'>${date}</span>
                                             </li>`).join('')}
                                     </ul>
                                     <div class="d-grid mt-3">
                                         <button type="button" class="btn btn-secondary" id="backToMainBtn">Voltar</button>
+                                    </div>
+                                    <div class="d-grid print-button">
+                                        <button type="button" class="btn btn-success" id="directPrintButton">
+                                            <i class="bi bi-printer"></i> Imprimir Relatório
+                                        </button>
+                                    </div>
+                                    <div class="print-only print-footer">
+                                        <p>Data de emissão: ${new Date().toLocaleDateString('pt-BR')}</p>
+                                        <p>
+                                            <span>______________________________</span><br>
+                                            <span>Assinatura e carimbo do médico</span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -258,6 +308,15 @@ document.addEventListener('DOMContentLoaded', function() {
                             });
                         }
                         
+                        // Adicionar evento ao botão de impressão
+                        const directPrintBtn = document.getElementById('directPrintButton');
+                        if (directPrintBtn) {
+                            directPrintBtn.addEventListener('click', function() {
+                                optimizeForPrinting();
+                                window.print();
+                            });
+                        }
+                        
                         // Mostrar a seção de resultados
                         resultsDiv.classList.remove('d-none');
                     } else {
@@ -266,7 +325,19 @@ document.addEventListener('DOMContentLoaded', function() {
                             usgResults.innerHTML = '';
                             let html = `<ul class='list-group mb-2'>`;
                             for (const [desc, date] of data.dates) {
-                                html += `<li class='list-group-item d-flex justify-content-between align-items-center'><span>${desc}</span><span class='badge bg-info'>${date}</span></li>`;
+                                html += `
+                                <li class='list-group-item d-flex justify-content-between align-items-center'>
+                                    <div class="d-flex align-items-center">
+                                        <span>${desc}</span>
+                                        <div class="check-container">
+                                            <input type="checkbox" id="usg_req_${desc.replace(/\s+/g, '_')}" class="form-check-input">
+                                            <label for="usg_req_${desc.replace(/\s+/g, '_')}">Solicitado</label>
+                                            <input type="checkbox" id="usg_check_${desc.replace(/\s+/g, '_')}" class="form-check-input">
+                                            <label for="usg_check_${desc.replace(/\s+/g, '_')}">Checado</label>
+                                        </div>
+                                    </div>
+                                    <span class='badge bg-info'>${date}</span>
+                                </li>`;
                             }
                             html += '</ul>';
                             usgResults.innerHTML = html;
@@ -351,13 +422,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     usgResultsSection.classList.add('d-none');
                 }
                 
-                // Exibir exames
+                // Exibir exames de forma mais compacta para impressão
                 if (examsResults) {
                     examsResults.innerHTML = '';
                     for (const [exam, items] of Object.entries(data.dates)) {
                         let html = `<h5 class='mt-3'>${exam}</h5><ul class='list-group mb-2'>`;
                         for (const [desc, date] of items) {
-                            html += `<li class='list-group-item d-flex justify-content-between align-items-center'><span>${desc}</span><span class='badge bg-primary'>${date}</span></li>`;
+                            html += `
+                            <li class='list-group-item d-flex justify-content-between align-items-center'>
+                                <div class="d-flex align-items-center">
+                                    <span>${desc}</span>
+                                    <div class="check-container">
+                                        <input type="checkbox" id="req_${desc.replace(/\s+/g, '_')}" class="form-check-input">
+                                        <label for="req_${desc.replace(/\s+/g, '_')}">Solicitado</label>
+                                        <input type="checkbox" id="check_${desc.replace(/\s+/g, '_')}" class="form-check-input">
+                                        <label for="check_${desc.replace(/\s+/g, '_')}">Checado</label>
+                                    </div>
+                                </div>
+                                <span class='badge bg-primary'>${date}</span>
+                            </li>`;
                         }
                         html += '</ul>';
                         examsResults.innerHTML += html;

@@ -108,13 +108,20 @@
                 </div>
                 
                 <div id="results" class="d-none">
+                    <!-- Botão de impressão -->
+                    <div class="d-grid print-button">
+                        <button type="button" class="btn btn-success mb-3" id="printButton">
+                            <i class="bi bi-printer"></i> Imprimir Relatório
+                        </button>
+                    </div>
+
                     <div class="card shadow mb-4">
-                        <div class="card-header bg-success text-white">
+                        <div class="card-header bg-success text-white no-print">
                             <h2 class="h4 mb-0">Resultados</h2>
                         </div>
                         <div class="card-body">
-                            <h3 class="h4 mb-3">Resumo do RN</h3>
-                            <ul class="list-group mb-3">
+                            <h3 class="h4 mb-3" id="patientSummaryHeader">Resumo do RN</h3>
+                            <ul class="list-group mb-3" id="patientSummaryList">
                                 <li class="list-group-item"><strong>Nome:</strong> <span id="resName"></span></li>
                                 <li class="list-group-item"><strong>Data de Nascimento:</strong> <span id="resBirthDate"></span></li>
                                 <li class="list-group-item"><strong>Idade Gestacional:</strong> <span id="resGestAge"></span> semanas</li>
@@ -128,6 +135,15 @@
                             <div id="usgResultsSection" class="d-none mt-4">
                                 <h3 class="h4 mb-3">Acompanhamento do USG de Crânio:</h3>
                                 <div id="usgResults"></div>
+                            </div>
+                            
+                            <!-- Rodapé para impressão -->
+                            <div class="print-only print-footer">
+                                <p class="no-print">Data de emissão: <span id="printDate"></span></p>
+                                <p>
+                                    <span>______________________________</span><br>
+                                    <span>Assinatura e carimbo do médico</span>
+                                </p>
                             </div>
                         </div>
                     </div>

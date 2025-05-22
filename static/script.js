@@ -257,6 +257,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         // Criar conteúdo de resultados para modo direto
                         const directResultsContent = `
+                            <!-- Botão de impressão no topo -->
+                            <div class="d-grid print-button">
+                                <button type="button" class="btn btn-success mb-3" id="directPrintButton">
+                                    <i class="bi bi-printer"></i> Imprimir Relatório
+                                </button>
+                            </div>
+                            
                             <div class="card shadow mb-4">
                                 <div class="card-header bg-info text-white">
                                     <h2 class="h4 mb-0">Acompanhamento de USG de Crânio</h2>
@@ -279,11 +286,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </ul>
                                     <div class="d-grid mt-3">
                                         <button type="button" class="btn btn-secondary" id="backToMainBtn">Voltar</button>
-                                    </div>
-                                    <div class="d-grid print-button">
-                                        <button type="button" class="btn btn-success" id="directPrintButton">
-                                            <i class="bi bi-printer"></i> Imprimir Relatório
-                                        </button>
                                     </div>
                                     <div class="print-only print-footer">
                                         <p>Data de emissão: ${new Date().toLocaleDateString('pt-BR')}</p>

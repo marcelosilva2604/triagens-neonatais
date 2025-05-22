@@ -29,6 +29,28 @@ body {
     background: linear-gradient(135deg, #0a58ca 0%, #084298 100%);
 }
 
+.btn-info {
+    background: linear-gradient(135deg, #0dcaf0 0%, #0ba8c9 100%);
+    border: none;
+    color: white;
+    font-weight: 500;
+    padding: 12px 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #0ba8c9 0%, #098da8 100%);
+    color: white;
+    box-shadow: 0 5px 15px rgba(11, 168, 201, 0.2);
+}
+
+#directUsgBtn {
+    font-size: 1.1rem;
+    border-radius: 10px;
+    padding: 12px 15px;
+}
+
 .table {
     margin-bottom: 0;
 }

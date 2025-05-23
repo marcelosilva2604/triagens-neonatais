@@ -141,14 +141,6 @@ body {
         display: none !important;
     }
     
-    /* NÃO esconder o resumo do RN e sua lista - reverter regras anteriores */
-    #patientSummaryHeader,
-    #patientSummaryList,
-    #results h3.h4:first-of-type,
-    #results ul.list-group:first-of-type {
-        display: block !important;
-    }
-    
     /* Mostrar apenas a parte de resultados */
     #results {
         display: block !important;
@@ -198,143 +190,167 @@ body {
     span.badge {
         display: inline-block !important;
         visibility: visible !important;
-        min-width: 90px !important;
-        white-space: nowrap !important;
-        text-align: right !important;
+        background-color: #0d6efd !important;
+        color: white !important;
         padding: 2px 6px !important;
-        border: 1px solid #333 !important;
-        background-color: white !important;
-        color: black !important;
-        margin-left: auto !important;
-        font-weight: bold !important;
-        font-size: 0.95em !important;
+        border-radius: 4px !important;
+        font-size: 10pt !important;
+        border: 1px solid #0d6efd !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
     
-    /* Formato simples para o cartão */
+    /* Esconder checkboxes na impressão */
+    .check-container,
+    .form-check-input {
+        display: none !important;
+    }
+    
+    /* Estilizar títulos na impressão */
+    h3, h4, h5 {
+        color: #333 !important;
+        font-weight: bold !important;
+        margin-top: 15px !important;
+        margin-bottom: 8px !important;
+        page-break-after: avoid !important;
+    }
+    
+    /* Garantir que listas sejam visíveis */
+    ul.list-group {
+        border: none !important;
+        margin-bottom: 15px !important;
+    }
+    
     .card {
         border: none !important;
         box-shadow: none !important;
-        page-break-inside: avoid;
-        margin: 0 !important;
-        break-inside: avoid;
     }
     
-    /* Ajustar o conteúdo do cartão */
     .card-body {
         padding: 0 !important;
     }
     
     .print-only {
-        display: block;
+        display: block !important;
     }
     
     .check-container {
-        display: flex;
-        align-items: center;
-        font-size: 0.8em !important;
-        flex-wrap: nowrap !important;
+        display: none !important;
     }
     
     .check-container label {
-        margin-left: 2px !important;
-        margin-right: 5px !important;
-        white-space: nowrap !important;
+        display: none !important;
     }
     
     .print-footer {
-        margin-top: 10px !important;
-        text-align: center;
-        border-top: 1px solid #ddd;
-        padding-top: 5px !important;
-        font-size: 8pt !important;
+        margin-top: 30px !important;
+        padding-top: 20px !important;
+        border-top: 1px solid #333 !important;
+        text-align: center !important;
     }
     
-    /* Classes específicas para impressão */
     .print-compact-heading {
-        font-size: 0.9em !important;
-        margin: 5px 0 !important;
+        margin: 0.3em 0 !important;
+        font-size: 1em !important;
     }
     
     .compact-print {
         padding: 0 !important;
         margin: 0 !important;
-        line-height: 1.2 !important;
     }
     
     .print-compact-checks {
-        margin-left: 3px !important;
+        font-size: 0.8em !important;
+        margin-left: 5px !important;
     }
     
     .print-compact-checks input {
-        transform: scale(0.8);
+        margin-right: 3px !important;
     }
     
     h5 {
-        font-size: 0.9em !important;
-        margin: 5px 0 3px 0 !important;
+        color: #333 !important;
         font-weight: bold !important;
+        font-size: 12pt !important;
+        margin-bottom: 5px !important;
+        margin-top: 12px !important;
     }
     
-    /* Comprimir espaçamentos para ajustar na página */
     h3, h4, p {
-        margin-top: 0.5em !important;
-        margin-bottom: 0.5em !important;
+        page-break-after: avoid !important;
+        margin-bottom: 8px !important;
     }
     
     ul.list-group {
-        margin-bottom: 0.5em !important;
+        page-break-inside: avoid !important;
+        margin-bottom: 10px !important;
     }
     
-    /* Evitar páginas em branco */
     html, body {
         height: auto !important;
         overflow: visible !important;
     }
     
-    /* Evitar quebras de página desnecessárias */
     #results > div, #examsResults, #usgResultsSection {
-        break-inside: avoid;
-        page-break-inside: avoid;
+        page-break-inside: avoid !important;
+        margin-bottom: 10px !important;
     }
     
-    /* Remover a data no topo */
+    /* Garantir que dados do paciente e USG sejam mostrados corretamente */
+    #patientDataSection,
+    #usgPatientSection {
+        display: block !important;
+    }
+    
+    #patientDataSection h3,
+    #usgPatientSection h3,
+    #patientSummaryList,
+    #usgPatientSection ul {
+        display: block !important;
+        visibility: visible !important;
+    }
+    
     #printDate {
+        font-weight: normal !important;
+    }
+    
+    /* Melhorar quebras de página */
+    .list-group-item:first-child {
+        page-break-before: avoid !important;
+    }
+    
+    .list-group-item:last-child {
+        page-break-after: avoid !important;
+    }
+    
+    /* Garantir que os títulos não fiquem órfãos */
+    h5:last-child {
+        page-break-after: avoid !important;
+    }
+    
+    /* Estilo específico para quando não há dados completos do RN */
+    .print-usg-only #patientDataSection {
         display: none !important;
     }
     
-    /* Ocultar URL e número de página na impressão */
-    @page {
-        size: A4 portrait;
-        margin: 10mm;
-        orphans: 4; /* Mínimo de linhas que podem ficar em uma página */
-        widows: 2; /* Mínimo de linhas que podem ir para a próxima página */
+    .print-usg-only #usgPatientSection {
+        display: block !important;
     }
     
-    /* Ocultar URL e números de página no rodapé da impressão */
-    @page {
-        margin-bottom: 0;
-    }
-    
-    @page :left {
-        margin-left: 0;
-    }
-    
-    @page :right {
-        margin-right: 0;
-    }
-    
-    /* Remover URL e números de páginas do navegador */
     html {
-        margin: 0;
-        padding: 0;
+        width: 100% !important;
+        height: 100% !important;
     }
     
-    /* Esconder os elementos gerados pelo navegador (URLs, número de páginas, etc.) */
     body::after {
-        content: none !important;
+        content: "";
+        display: block;
+        height: 1px;
     }
     
     body::before {
-        content: none !important;
+        content: "";
+        display: block;
+        height: 1px;
     }
 } 

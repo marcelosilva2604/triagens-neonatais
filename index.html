@@ -11,7 +11,7 @@
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="card shadow mb-4">
+                <div class="card shadow mb-4" id="mainCard">
                     <div class="card-header bg-primary text-white">
                         <h1 class="h3 mb-0 text-center">Calculadora de Triagens Neonatais</h1>
                     </div>
@@ -62,6 +62,10 @@
                     </div>
                     <div class="card-body">
                         <form id="usgCranioForm">
+                            <div class="mb-3">
+                                <label for="usgPatientName" class="form-label">Nome do Paciente:</label>
+                                <input type="text" class="form-control" id="usgPatientName" required>
+                            </div>
                             <div class="mb-3">
                                 <label for="usgDate" class="form-label">Data do primeiro USG:</label>
                                 <input type="date" class="form-control" id="usgDate" required>
@@ -120,15 +124,28 @@
                             <h2 class="h4 mb-0">Resultados</h2>
                         </div>
                         <div class="card-body">
-                            <h3 class="h4 mb-3" id="patientSummaryHeader">Resumo do RN</h3>
-                            <ul class="list-group mb-3" id="patientSummaryList">
-                                <li class="list-group-item"><strong>Nome:</strong> <span id="resName"></span></li>
-                                <li class="list-group-item"><strong>Data de Nascimento:</strong> <span id="resBirthDate"></span></li>
-                                <li class="list-group-item"><strong>Idade Gestacional:</strong> <span id="resGestAge"></span> semanas</li>
-                                <li class="list-group-item"><strong>Peso ao Nascer:</strong> <span id="resWeight"></span> g</li>
-                            </ul>
+                            <!-- Seção de dados do paciente - só aparece quando há dados completos -->
+                            <div id="patientDataSection">
+                                <h3 class="h4 mb-3" id="patientSummaryHeader">Resumo do RN</h3>
+                                <ul class="list-group mb-3" id="patientSummaryList">
+                                    <li class="list-group-item"><strong>Nome:</strong> <span id="resName"></span></li>
+                                    <li class="list-group-item"><strong>Data de Nascimento:</strong> <span id="resBirthDate"></span></li>
+                                    <li class="list-group-item"><strong>Idade Gestacional:</strong> <span id="resGestAge"></span> semanas</li>
+                                    <li class="list-group-item"><strong>Peso ao Nascer:</strong> <span id="resWeight"></span> g</li>
+                                </ul>
+                            </div>
                             
-                            <h3 class="h4 mb-3">Datas das Triagens e Exames:</h3>
+                            <!-- Seção de dados do USG - só para cálculos de USG isolados -->
+                            <div id="usgPatientSection" class="d-none">
+                                <h3 class="h4 mb-3">Paciente</h3>
+                                <ul class="list-group mb-3">
+                                    <li class="list-group-item"><strong>Nome:</strong> <span id="usgResName"></span></li>
+                                    <li class="list-group-item"><strong>Data do USG:</strong> <span id="usgResDate"></span></li>
+                                    <li class="list-group-item"><strong>Resultado:</strong> <span id="usgResResult"></span></li>
+                                </ul>
+                            </div>
+                            
+                            <h3 class="h4 mb-3" id="examsTitle">Datas das Triagens e Exames:</h3>
                             
                             <div id="examsResults"></div>
                             

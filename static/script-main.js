@@ -2,12 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Elementos principais
     const screeningForm = document.getElementById('screeningForm');
     const resultsDiv = document.getElementById('results');
-    const mainCard = document.getElementById('mainCard');
-    const usgCranioCard = document.getElementById('usgCranioCard');
-    const usgCranioForm = document.getElementById('usgCranioForm');
     const examsResults = document.getElementById('examsResults');
-    const usgResults = document.getElementById('usgResults');
-    const usgResultsSection = document.getElementById('usgResultsSection');
     const errorDiv = document.getElementById('error');
     const printButton = document.getElementById('printButton');
     const printDateSpan = document.getElementById('printDate');
@@ -21,26 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Elementos para resultados do paciente
     const patientDataSection = document.getElementById('patientDataSection');
-    const usgPatientSection = document.getElementById('usgPatientSection');
     const resNameSpan = document.getElementById('resName');
     const resBirthDateSpan = document.getElementById('resBirthDate');
     const resGestAgeSpan = document.getElementById('resGestAge');
     const resWeightSpan = document.getElementById('resWeight');
     
-    // Elementos para USG
-    const usgPatientNameInput = document.getElementById('usgPatientName');
-    const usgResNameSpan = document.getElementById('usgResName');
-    const usgResDateSpan = document.getElementById('usgResDate');
-    const usgResResultSpan = document.getElementById('usgResResult');
-    const examsTitle = document.getElementById('examsTitle');
-    
     // Modal de fatores de risco (se disponível)
     const riskFactorsModal = document.getElementById('riskFactorsModal') ? 
         new bootstrap.Modal(document.getElementById('riskFactorsModal')) : null;
-    
-    // Botões de navegação
-    const directUsgBtn = document.getElementById('directUsgBtn');
-    const voltarBtn = document.getElementById('voltarBtn');
     
     // Data de hoje
     const today = new Date().toISOString().split('T')[0];
@@ -50,10 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
         birthDateInput.max = today;
         birthDateInput.value = today;
     }
-    
-    // Variáveis globais para armazenar dados do paciente
-    let patientData = {};
-    let isUsgOnlyMode = false; // Para saber se estamos no modo USG isolado
     
     // IMPLEMENTAÇÃO DAS FUNÇÕES DO BACKEND
     
@@ -129,69 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         return Math.round(weight);
-    }
-    
-    // Função para traduzir resultado do USG
-    function translateUsgResult(result) {
-        const translations = {
-            'normal': 'Normal',
-            'HI': 'Hemorragia Grau I',
-            'HII': 'Hemorragia Grau II',
-            'HIII': 'Hemorragia Grau III',
-            'HIV': 'Hemorragia Grau IV'
-        };
-        return translations[result] || result;
-    }
-    
-    // Calcular datas de follow-up de USG baseado no resultado
-    function calculateUsgFollowup(usgDate, usgResult, gestationalAge) {
-        const results = [];
-        
-        // Converter string para objeto de data
-        const usgDateObj = new Date(usgDate);
-        
-        // Adicionar o USG realizado
-        results.push(["USG realizado", formatDate(usgDateObj)]);
-        
-        if (usgResult === 'normal') {
-            // 30 dias após o USG
-            let followUpDate = addDays(usgDateObj, 30);
-            followUpDate = getNextTuesdayOrFriday(followUpDate);
-            results.push(["Controle Normal", formatDate(followUpDate) + " (ter/sex)"]);
-            
-            // Se tiver menos de 37 semanas, adicionar US às 40 semanas
-            if (gestationalAge && parseFloat(gestationalAge) < 37) {
-                const weeksTo40 = 40 - parseFloat(gestationalAge);
-                let date40Weeks = addDays(usgDateObj, weeksTo40 * 7);
-                date40Weeks = getNextTuesdayOrFriday(date40Weeks);
-                if (date40Weeks > followUpDate) {
-                    results.push(["USG às 40 semanas", formatDate(date40Weeks) + " (ter/sex)"]);
-                }
-            }
-        } else if (usgResult === 'HI' || usgResult === 'HII') {
-            // Repetir quinzenalmente por 2 meses
-            let currentDate = usgDateObj;
-            for (let i = 1; i <= 4; i++) { // 4 USGs quinzenais
-                currentDate = addDays(currentDate, 14);
-                currentDate = getNextTuesdayOrFriday(currentDate);
-                results.push([`Controle HI/HII (${i})`, formatDate(currentDate) + " (ter/sex)"]);
-            }
-            
-            results.push(["Medida PC", "1x por semana"]);
-        } else if (usgResult === 'HIII' || usgResult === 'HIV') {
-            // Repetir semanalmente por 2 meses
-            let currentDate = usgDateObj;
-            for (let i = 1; i <= 8; i++) { // 8 USGs semanais
-                currentDate = addDays(currentDate, 7);
-                currentDate = getNextTuesdayOrFriday(currentDate);
-                results.push([`Controle HIII/HIV (${i})`, formatDate(currentDate) + " (ter/sex)"]);
-            }
-            
-            results.push(["Medida PC", "3x por semana (seg/qua/sex)"]);
-            results.push(["Consulta Neurocirurgia", "Agendar com urgência"]);
-        }
-        
-        return results;
     }
     
     // Calcular datas das triagens
@@ -411,144 +327,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 false // hasRiskFactors
             );
             
-            // Armazenar dados do paciente
-            patientData = {
-                name: babyName,
-                birthDate: birthDate,
-                gestAge: gestationalAgeFormatted,
-                weight: birthWeight
-            };
-            
-            // Resetar modo USG isolado
-            isUsgOnlyMode = false;
-            
             // Mostrar dados do paciente
             patientDataSection.classList.remove('d-none');
-            usgPatientSection.classList.add('d-none');
-            resNameSpan.textContent = patientData.name;
-            resBirthDateSpan.textContent = formatDate(patientData.birthDate);
-            resGestAgeSpan.textContent = patientData.gestAge;
-            resWeightSpan.textContent = patientData.weight;
-            
-            // Mostrar título de triagens
-            examsTitle.textContent = 'Datas das Triagens e Exames:';
+            resNameSpan.textContent = babyName;
+            resBirthDateSpan.textContent = formatDate(birthDate);
+            resGestAgeSpan.textContent = gestationalAgeFormatted;
+            resWeightSpan.textContent = birthWeight;
             
             // Exibir resultados
             displayResults(dates);
             
-            // Esconder o cartão de USG
-            usgCranioCard.classList.add('d-none');
-            usgResultsSection.classList.add('d-none');
         } catch (error) {
             showError(error.message);
         }
-    });
-    
-    // Formulário de USG
-    usgCranioForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        clearError();
-        
-        try {
-            // Obter valores do formulário
-            const patientName = usgPatientNameInput.value.trim();
-            const usgDate = document.getElementById('usgDate').value;
-            const usgResult = document.querySelector('input[name="usgResult"]:checked').value;
-            
-            // Validar dados
-            if (!patientName || !usgDate) {
-                throw new Error('Preencha o nome do paciente e a data do USG');
-            }
-            
-            // Calcular acompanhamento
-            const followupResults = calculateUsgFollowup(usgDate, usgResult, 0);
-            
-            // Definir modo USG isolado
-            isUsgOnlyMode = true;
-            
-            // Esconder dados do paciente principal e mostrar dados do USG
-            patientDataSection.classList.add('d-none');
-            usgPatientSection.classList.remove('d-none');
-            
-            // Preencher dados do USG
-            usgResNameSpan.textContent = patientName;
-            usgResDateSpan.textContent = formatDate(usgDate);
-            usgResResultSpan.textContent = translateUsgResult(usgResult);
-            
-            // Alterar título
-            examsTitle.textContent = 'Cronograma de Acompanhamento:';
-            
-            // Limpar resultados anteriores
-            usgResults.innerHTML = '';
-            examsResults.innerHTML = '';
-            
-            // Criar uma lista para os resultados
-            const usgList = document.createElement('ul');
-            usgList.className = 'list-group mb-4';
-            
-            // Adicionar cada data à lista
-            followupResults.forEach(item => {
-                const [text, date] = item;
-                const li = createChecklistItem(text, date);
-                usgList.appendChild(li);
-            });
-            
-            // Adicionar a lista à seção de resultados de exames (não na seção separada)
-            examsResults.appendChild(usgList);
-            
-            // Mostrar a seção de resultados
-            resultsDiv.classList.remove('d-none');
-            usgResultsSection.classList.add('d-none'); // Usar a seção principal
-            
-            // Esconder o cartão de USG
-            usgCranioCard.classList.add('d-none');
-            
-            // Definir a data da impressão
-            const today = new Date();
-            printDateSpan.textContent = today.toLocaleDateString('pt-BR');
-        } catch (error) {
-            showError(error.message);
-        }
-    });
-    
-    // Botão de USG direto
-    directUsgBtn.addEventListener('click', function() {
-        clearError();
-        mainCard.classList.add('d-none');
-        usgCranioCard.classList.remove('d-none');
-        resultsDiv.classList.add('d-none');
-        usgResultsSection.classList.add('d-none');
-        
-        // Limpar formulário completamente
-        usgPatientNameInput.value = '';
-        document.getElementById('usgDate').value = today;
-        
-        // Resetar seleção do resultado para "Normal"
-        document.getElementById('usgNormal').checked = true;
-        
-        // Definir a data do USG como hoje por padrão
-        const usgDateInput = document.getElementById('usgDate');
-        if (usgDateInput) {
-            usgDateInput.value = today;
-            usgDateInput.max = today;
-        }
-        
-        // Focar no campo de nome para facilitar o preenchimento
-        setTimeout(() => {
-            usgPatientNameInput.focus();
-        }, 100);
-    });
-    
-    // Botão voltar
-    voltarBtn.addEventListener('click', function() {
-        clearError();
-        mainCard.classList.remove('d-none');
-        usgCranioCard.classList.add('d-none');
-        resultsDiv.classList.add('d-none');
-        usgResultsSection.classList.add('d-none');
-        
-        // Resetar estado
-        isUsgOnlyMode = false;
     });
     
     // Botão de impressão

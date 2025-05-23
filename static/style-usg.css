@@ -1,3 +1,4 @@
+/* Estilos visuais para USG de Crânio */
 body {
     background-color: #f8f9fa;
 }
@@ -9,24 +10,12 @@ body {
 
 .card-header {
     border-radius: 15px 15px 0 0 !important;
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+    background: linear-gradient(135deg, #0dcaf0 0%, #0ba8c9 100%) !important;
 }
 
 .form-control:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-    border: none;
-    padding: 10px 20px;
-    transition: transform 0.2s;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, #0a58ca 0%, #084298 100%);
+    border-color: #17a2b8;
+    box-shadow: 0 0 0 0.25rem rgba(23, 162, 184, 0.25);
 }
 
 .btn-info {
@@ -45,6 +34,18 @@ body {
     box-shadow: 0 5px 15px rgba(11, 168, 201, 0.2);
 }
 
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    border: none;
+    padding: 12px 20px;
+    transition: transform 0.2s;
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+}
+
 .btn-success {
     background: linear-gradient(135deg, #198754 0%, #146c43 100%);
     border: none;
@@ -55,12 +56,6 @@ body {
 .btn-success:hover {
     transform: translateY(-2px);
     background: linear-gradient(135deg, #146c43 0%, #0f5132 100%);
-}
-
-#directUsgBtn {
-    font-size: 1.1rem;
-    border-radius: 10px;
-    padding: 12px 15px;
 }
 
 /* Estilos específicos para o formulário de USG */
@@ -76,30 +71,9 @@ body {
     background-color: white;
 }
 
-#usgCranioCard .alert-info {
+.alert-info {
     border-left: 4px solid #17a2b8;
     background-color: #e7f3ff;
-}
-
-.table {
-    margin-bottom: 0;
-}
-
-.table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-}
-
-.check-container {
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-}
-
-.check-container label {
-    margin-left: 5px;
-    margin-right: 15px;
-    font-size: 0.85rem;
 }
 
 .print-button {
@@ -109,22 +83,6 @@ body {
 
 .print-only {
     display: none;
-}
-
-/* Classes para compactação de impressão */
-.compact-print {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.print-compact-heading {
-    margin: 0.3em 0 !important;
-    font-size: 1em !important;
-}
-
-.print-compact-checks {
-    font-size: 0.8em !important;
-    margin-left: 5px !important;
 }
 
 @media (max-width: 768px) {
@@ -138,7 +96,7 @@ body {
     }
 }
 
-/* CSS para impressão - Triagens Neonatais */
+/* CSS para impressão - USG de Crânio */
 @media print {
     body {
         background-color: white;
@@ -155,13 +113,8 @@ body {
         margin: 0;
     }
     
-    /* Esconder todos os elementos exceto os resultados */
-    body > div.container > div.row > div.col-md-8 > *:not(#results) {
-        display: none !important;
-    }
-    
-    /* Esconder a interface de calculadora e o botão de impressão */
-    #screeningForm, #mainCard, .btn, .print-button {
+    /* Esconder formulário e botões */
+    #usgCranioCard, .btn, .print-button {
         display: none !important;
     }
     
@@ -178,26 +131,24 @@ body {
     }
     
     /* Remover cabeçalho desnecessário no cartão de resultados */
-    #results .card-header, 
-    #results h1, 
-    #results h2.h4 {
+    #results .card-header {
         display: none !important;
     }
     
-    /* Mostrar dados do paciente (formulário completo) */
-    #patientDataSection {
+    /* Garantir que os dados do USG sejam exibidos */
+    #usgPatientSection {
         display: block !important;
+        margin-bottom: 20px !important;
     }
     
-    #patientDataSection h3,
-    #patientSummaryList,
-    #patientDataSection ul,
-    #patientDataSection li {
+    #usgPatientSection h3,
+    #usgPatientSection ul,
+    #usgPatientSection li {
         display: block !important;
         visibility: visible !important;
     }
     
-    /* Garantir que todos os exames sejam exibidos */
+    /* Garantir que os resultados do cronograma sejam exibidos */
     #examsResults {
         display: block !important;
     }
@@ -210,15 +161,17 @@ body {
         page-break-inside: avoid;
     }
     
-    /* Corrigir problema das datas na impressão */
+    /* Estilizar itens da lista */
     .list-group-item {
         display: flex !important;
         justify-content: space-between !important;
         align-items: flex-start !important;
-        padding: 5px 10px !important;
-        margin-bottom: 3px !important;
+        padding: 8px 10px !important;
+        margin-bottom: 5px !important;
         width: 100% !important;
         page-break-inside: avoid !important;
+        border: 1px solid #dee2e6 !important;
+        border-radius: 4px !important;
     }
     
     .list-group-item > div {
@@ -226,18 +179,19 @@ body {
         margin-right: 10px !important;
     }
     
-    /* Garantir que as datas dos exames (badges) sejam mostradas corretamente na impressão */
+    /* Garantir que as datas dos exames (badges) sejam mostradas corretamente */
     .badge, 
     .list-group-item .badge,
     span.badge {
         display: inline-block !important;
         visibility: visible !important;
-        background-color: #0d6efd !important;
+        background-color: #17a2b8 !important;
         color: white !important;
-        padding: 2px 6px !important;
+        padding: 4px 8px !important;
         border-radius: 4px !important;
         font-size: 10pt !important;
-        border: 1px solid #0d6efd !important;
+        font-weight: bold !important;
+        border: 1px solid #17a2b8 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
@@ -252,15 +206,30 @@ body {
     h3, h4, h5 {
         color: #333 !important;
         font-weight: bold !important;
-        margin-top: 15px !important;
-        margin-bottom: 8px !important;
+        margin-top: 20px !important;
+        margin-bottom: 12px !important;
         page-break-after: avoid !important;
+    }
+    
+    /* Títulos específicos para USG */
+    #examsTitle {
+        color: #17a2b8 !important;
+        font-size: 14pt !important;
+        margin-top: 15px !important;
+    }
+    
+    #usgPatientSection h3 {
+        color: #17a2b8 !important;
+        font-size: 14pt !important;
+        margin-top: 0 !important;
+        margin-bottom: 10px !important;
     }
     
     /* Garantir que listas sejam visíveis */
     ul.list-group {
         border: none !important;
-        margin-bottom: 15px !important;
+        margin-bottom: 20px !important;
+        padding: 0 !important;
     }
     
     .card {
@@ -279,7 +248,7 @@ body {
     .print-footer {
         margin-top: 30px !important;
         padding-top: 20px !important;
-        border-top: 1px solid #333 !important;
+        border-top: 2px solid #17a2b8 !important;
         text-align: center !important;
     }
     
@@ -287,18 +256,18 @@ body {
         color: #333 !important;
         font-weight: bold !important;
         font-size: 12pt !important;
-        margin-bottom: 5px !important;
-        margin-top: 12px !important;
+        margin-bottom: 8px !important;
+        margin-top: 15px !important;
     }
     
     h3, h4, p {
         page-break-after: avoid !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 10px !important;
     }
     
     ul.list-group {
         page-break-inside: avoid !important;
-        margin-bottom: 10px !important;
+        margin-bottom: 15px !important;
     }
     
     html, body {
@@ -308,7 +277,7 @@ body {
     
     #results > div, #examsResults {
         page-break-inside: avoid !important;
-        margin-bottom: 10px !important;
+        margin-bottom: 15px !important;
     }
     
     #printDate {
@@ -327,5 +296,20 @@ body {
     /* Garantir que os títulos não fiquem órfãos */
     h5:last-child {
         page-break-after: avoid !important;
+    }
+    
+    /* Evitar páginas em branco */
+    @page {
+        margin: 15mm;
+        size: A4 portrait;
+    }
+    
+    /* Força início na primeira página */
+    body {
+        page-break-before: avoid !important;
+    }
+    
+    #results {
+        page-break-before: avoid !important;
     }
 } 

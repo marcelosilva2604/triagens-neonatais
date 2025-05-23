@@ -254,6 +254,29 @@ body {
         margin-left: 3px !important;
         margin-right: 10px !important;
         font-size: 9pt !important;
+        display: inline-block !important;
+        visibility: visible !important;
+        color: black !important;
+    }
+    
+    /* Garantir que as palavras "Solicitado" e "Verificado" apareçam na impressão */
+    .check-container label:before {
+        content: none !important;
+    }
+    
+    .check-container label:after {
+        content: none !important;
+    }
+    
+    /* Forçar visibilidade das labels dos checkboxes */
+    label[for*="solicitado"],
+    label[for*="verificado"] {
+        display: inline-block !important;
+        visibility: visible !important;
+        color: black !important;
+        font-size: 9pt !important;
+        margin-left: 3px !important;
+        margin-right: 10px !important;
     }
     
     .check-container input[type="checkbox"] {

@@ -1,38 +1,222 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site Temporariamente Indisponível</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 100px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            color: #666;
-            line-height: 1.6;
-        }
-    </style>
+    <title>Calculadora de Triagens Neonatais</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Site Temporariamente Indisponível</h1>
-        <p>Esta página está temporariamente fora do ar para manutenção.</p>
-        <p>Por favor, tente novamente mais tarde.</p>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="h3 mb-0 text-center">Calculadora de Triagens Neonatais</h1>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid mb-4">
+                            <button type="button" class="btn btn-info" id="directUsgBtn">Cálculo do USG de Crânio</button>
+                        </div>
+                        <form id="screeningForm" class="mb-4">
+                            <div class="mb-3">
+                                <label for="babyName" class="form-label">Nome do RN:</label>
+                                <input type="text" class="form-control" id="babyName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="birthDate" class="form-label">Data de Nascimento:</label>
+                                <input type="date" class="form-control" id="birthDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Idade Gestacional:</label>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="gestationalAgeWeeks" min="20" max="45" required>
+                                            <span class="input-group-text">semanas</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="gestationalAgeDays" min="0" max="6" value="0">
+                                            <span class="input-group-text">dias</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="birthWeight" class="form-label">Peso ao Nascer:</label>
+                                <input type="text" class="form-control" id="birthWeight" required>
+                                <div class="form-text">Digite o peso em gramas (ex: 2500) ou quilos (ex: 2,5 ou 2.5). O sistema irá normalizar automaticamente.</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Calcular Datas</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Card para cálculo do USG de Crânio -->
+                <div class="card shadow mb-4 d-none" id="usgCranioCard">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="h4 mb-0">Acompanhamento de USG de Crânio</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="usgCranioForm">
+                            <div class="mb-3">
+                                <label for="usgDate" class="form-label">Data do primeiro USG:</label>
+                                <input type="date" class="form-control" id="usgDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Resultado do USG:</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usgResult" id="usgNormal" value="normal" checked>
+                                    <label class="form-check-label" for="usgNormal">
+                                        Normal
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usgResult" id="usgHI" value="HI">
+                                    <label class="form-check-label" for="usgHI">
+                                        Hemorragia Grau I
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usgResult" id="usgHII" value="HII">
+                                    <label class="form-check-label" for="usgHII">
+                                        Hemorragia Grau II
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usgResult" id="usgHIII" value="HIII">
+                                    <label class="form-check-label" for="usgHIII">
+                                        Hemorragia Grau III
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usgResult" id="usgHIV" value="HIV">
+                                    <label class="form-check-label" for="usgHIV">
+                                        Hemorragia Grau IV
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-secondary" id="voltarBtn">Voltar</button>
+                                <button type="submit" class="btn btn-info flex-grow-1">Calcular Acompanhamento</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div id="results" class="d-none">
+                    <!-- Botão de impressão -->
+                    <div class="d-grid print-button">
+                        <button type="button" class="btn btn-success mb-3" id="printButton">
+                            <i class="bi bi-printer"></i> Imprimir Relatório
+                        </button>
+                    </div>
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header bg-success text-white no-print">
+                            <h2 class="h4 mb-0">Resultados</h2>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="h4 mb-3" id="patientSummaryHeader">Resumo do RN</h3>
+                            <ul class="list-group mb-3" id="patientSummaryList">
+                                <li class="list-group-item"><strong>Nome:</strong> <span id="resName"></span></li>
+                                <li class="list-group-item"><strong>Data de Nascimento:</strong> <span id="resBirthDate"></span></li>
+                                <li class="list-group-item"><strong>Idade Gestacional:</strong> <span id="resGestAge"></span> semanas</li>
+                                <li class="list-group-item"><strong>Peso ao Nascer:</strong> <span id="resWeight"></span> g</li>
+                            </ul>
+                            
+                            <h3 class="h4 mb-3">Datas das Triagens e Exames:</h3>
+                            
+                            <div id="examsResults"></div>
+                            
+                            <div id="usgResultsSection" class="d-none mt-4">
+                                <h3 class="h4 mb-3">Acompanhamento do USG de Crânio:</h3>
+                                <div id="usgResults"></div>
+                            </div>
+                            
+                            <!-- Rodapé para impressão -->
+                            <div class="print-only print-footer">
+                                <p class="no-print">Data de emissão: <span id="printDate"></span></p>
+                                <p>
+                                    <span>______________________________</span><br>
+                                    <span>Assinatura e carimbo do médico</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="error" class="alert alert-danger d-none" role="alert">
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Modal para fatores de risco de HPIV -->
+    <div class="modal fade" id="riskFactorsModal" tabindex="-1" aria-labelledby="riskFactorsModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="riskFactorsModalLabel">Fatores de Risco para HPIV</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>O RN possui algum dos seguintes fatores de risco?</p>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="" id="dpp">
+              <label class="form-check-label" for="dpp">
+                Descolamento prematuro de placenta
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="" id="reanimacao">
+              <label class="form-check-label" for="reanimacao">
+                Necessidade de reanimação neonatal
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="" id="drogas">
+              <label class="form-check-label" for="drogas">
+                Uso de drogas vasoativas
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="" id="acidose">
+              <label class="form-check-label" for="acidose">
+                Acidose severa
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="" id="vm">
+              <label class="form-check-label" for="vm">
+                Ventilação mecânica
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="" id="hipotermia">
+              <label class="form-check-label" for="hipotermia">
+                Protocolo de hipotermia
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" value="" id="sepse">
+              <label class="form-check-label" for="sepse">
+                Sepse
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="confirmRiskFactors">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="static/script-static.js"></script>
 </body>
 </html> 

@@ -242,10 +242,43 @@ body {
         print-color-adjust: exact !important;
     }
     
-    /* Esconder checkboxes na impressão */
-    .check-container,
-    .form-check-input {
-        display: none !important;
+    /* Mostrar checkboxes como quadrados na impressão para preenchimento manual */
+    .check-container {
+        display: flex !important;
+        align-items: center !important;
+        margin-left: 10px !important;
+        font-size: 9pt !important;
+    }
+    
+    .check-container label {
+        margin-left: 3px !important;
+        margin-right: 10px !important;
+        font-size: 9pt !important;
+    }
+    
+    .check-container input[type="checkbox"] {
+        display: inline-block !important;
+        width: 12px !important;
+        height: 12px !important;
+        border: 1px solid #333 !important;
+        background-color: white !important;
+        margin-right: 3px !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        print-color-adjust: exact !important;
+    }
+    
+    /* Alinhar o valor do peso à direita na impressão - versão compatível */
+    .list-group-item:nth-child(4) {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+    
+    .list-group-item:nth-child(4) span {
+        text-align: right !important;
+        margin-left: auto !important;
+        font-weight: normal !important;
     }
     
     /* Estilizar títulos na impressão */

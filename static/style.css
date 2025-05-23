@@ -291,25 +291,6 @@ body {
         print-color-adjust: exact !important;
     }
     
-    /* Alinhar todos os valores do Resumo do RN à direita na impressão */
-    #patientSummaryList .list-group-item:nth-child(1),
-    #patientSummaryList .list-group-item:nth-child(2),
-    #patientSummaryList .list-group-item:nth-child(3),
-    #patientSummaryList .list-group-item:nth-child(4) {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-    }
-    
-    #patientSummaryList .list-group-item:nth-child(1) span,
-    #patientSummaryList .list-group-item:nth-child(2) span,
-    #patientSummaryList .list-group-item:nth-child(3) span,
-    #patientSummaryList .list-group-item:nth-child(4) span {
-        text-align: right !important;
-        margin-left: auto !important;
-        font-weight: normal !important;
-    }
-    
     /* Estilizar títulos na impressão */
     h3, h4, h5 {
         color: #333 !important;

@@ -58,20 +58,23 @@
                 <!-- Card para cálculo do USG de Crânio -->
                 <div class="card shadow mb-4 d-none" id="usgCranioCard">
                     <div class="card-header bg-info text-white">
-                        <h2 class="h4 mb-0">Acompanhamento de USG de Crânio</h2>
+                        <h2 class="h4 mb-0">🧠 Acompanhamento de USG de Crânio</h2>
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-info mb-3">
+                            <strong>ℹ️ Instruções:</strong> Preencha os dados abaixo para calcular o cronograma de acompanhamento do USG de crânio.
+                        </div>
                         <form id="usgCranioForm">
                             <div class="mb-3">
-                                <label for="usgPatientName" class="form-label">Nome do Paciente:</label>
-                                <input type="text" class="form-control" id="usgPatientName" required>
+                                <label for="usgPatientName" class="form-label"><strong>Nome do Paciente:</strong></label>
+                                <input type="text" class="form-control form-control-lg" id="usgPatientName" placeholder="Digite o nome completo do paciente" required>
                             </div>
                             <div class="mb-3">
-                                <label for="usgDate" class="form-label">Data do primeiro USG:</label>
+                                <label for="usgDate" class="form-label"><strong>Data do primeiro USG:</strong></label>
                                 <input type="date" class="form-control" id="usgDate" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Resultado do USG:</label>
+                                <label class="form-label"><strong>Resultado do USG:</strong></label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="usgResult" id="usgNormal" value="normal" checked>
                                     <label class="form-check-label" for="usgNormal">
@@ -104,8 +107,8 @@
                                 </div>
                             </div>
                             <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-secondary" id="voltarBtn">Voltar</button>
-                                <button type="submit" class="btn btn-info flex-grow-1">Calcular Acompanhamento</button>
+                                <button type="button" class="btn btn-secondary" id="voltarBtn">⬅️ Voltar</button>
+                                <button type="submit" class="btn btn-info flex-grow-1">🧮 Calcular Acompanhamento</button>
                             </div>
                         </form>
                     </div>

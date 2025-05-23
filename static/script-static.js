@@ -519,8 +519,12 @@ document.addEventListener('DOMContentLoaded', function() {
         resultsDiv.classList.add('d-none');
         usgResultsSection.classList.add('d-none');
         
-        // Limpar formulário
+        // Limpar formulário completamente
         usgPatientNameInput.value = '';
+        document.getElementById('usgDate').value = today;
+        
+        // Resetar seleção do resultado para "Normal"
+        document.getElementById('usgNormal').checked = true;
         
         // Definir a data do USG como hoje por padrão
         const usgDateInput = document.getElementById('usgDate');
@@ -528,6 +532,11 @@ document.addEventListener('DOMContentLoaded', function() {
             usgDateInput.value = today;
             usgDateInput.max = today;
         }
+        
+        // Focar no campo de nome para facilitar o preenchimento
+        setTimeout(() => {
+            usgPatientNameInput.focus();
+        }, 100);
     });
     
     // Botão voltar

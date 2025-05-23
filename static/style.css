@@ -268,14 +268,14 @@ body {
         print-color-adjust: exact !important;
     }
     
-    /* Alinhar o valor do peso à direita na impressão - versão compatível */
-    .list-group-item:nth-child(4) {
+    /* Alinhar o valor do peso à direita na impressão - versão compatível e específica */
+    #patientSummaryList .list-group-item:nth-child(4) {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
     }
     
-    .list-group-item:nth-child(4) span {
+    #patientSummaryList .list-group-item:nth-child(4) span {
         text-align: right !important;
         margin-left: auto !important;
         font-weight: normal !important;
